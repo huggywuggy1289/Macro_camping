@@ -5,10 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# WebDriver 초기화
-#xpath 반드시 확인하자.
-# 7.15 A구역
-XPATH = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[2]/td[2]/ul/li[1]/button'
+# 7.16 A구역
+XPATH = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[3]/td[3]/ul/li[1]/button'
 
 def clock(target_time):
     while True:
@@ -20,6 +18,18 @@ def clock(target_time):
             print(f"현재 시간: {current_time} - 기다리는 중...")
             time.sleep(5)  # 5초 대기 후 다시 체크
             browser.refresh()
+
+def click_button(xpath):
+    try:
+        button = WebDriverWait(browser, 20).until(EC.element_to_be_clickable((By.XPATH, xpath)))
+        browser.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
+        time.sleep(1)
+        browser.execute_script("arguments[0].click();", button)
+        print(f"버튼 클릭 성공: {xpath}")
+        return True
+    except Exception as e:
+        print(f"버튼 클릭 실패: {e}")
+        return False
 
 try:
     browser = webdriver.Chrome()
@@ -44,21 +54,12 @@ try:
     print("날짜 선택 완료")
 
     # A구역 접속 버튼 클릭
-    button = WebDriverWait(browser, 20).until(EC.element_to_be_clickable((By.XPATH, XPATH)))
-    browser.execute_script("arguments[0].scrollIntoView(true);", button)
-    button.click()
-    print("A구역 접속 버튼 클릭 성공")
+    if click_button(XPATH):
+        print("A구역 접속 버튼 클릭 성공")
+    else:
+        print("A구역 접속 버튼 클릭 실패")
+        raise Exception("A구역 접속 버튼 클릭 실패")
 
-    def click_button():
-        try:
-            button = WebDriverWait(browser, 20).until(EC.element_to_be_clickable((By.XPATH, XPATH)))
-            browser.execute_script("arguments[0].scrollIntoView(true);", button)
-            browser.execute_script("arguments[0].click();", button)
-            print(f"버튼 클릭 성공: {XPATH}")
-            return True
-        except Exception as e:
-            print(f"버튼 클릭 실패: {e}")
-            return False
 
     # 특정 위치 버튼 클릭
     location_button_xpath = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[49]'
@@ -71,5 +72,5 @@ except Exception as e:
     print(f"예약 과정에서 오류가 발생하였습니다: {e}")
 
 finally:
-    time.sleep(500)
+    time.sleep(5000)
     browser.quit()  # 브라우저 종료
