@@ -62,7 +62,7 @@ try:
 
     # 특정 위치 버튼 클릭 A134
     try:
-        location_button_xpath = '//span[text()="A132"]/parent::button'
+        location_button_xpath = '//span[text()="A134"]/parent::button'
         job = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, location_button_xpath)))
         browser.execute_script("arguments[0].scrollIntoView({block: 'center'});", job)
         time.sleep(1)
@@ -95,29 +95,3 @@ except Exception as e:
 finally:
     time.sleep(5000)
     browser.quit()  # 브라우저 종료
-
-# A구역 버튼
-# 7월 29일
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[5]/td[2]/ul/li[1]/button
-# 7월 30일
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[5]/td[3]/ul/li[1]/button
-
-# A139
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[39]
-# A140
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[40]
-
-# A147
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[47]
-# A148
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[48]
-
-# A149
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[49]
-# A150
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[50]
-
-# A143
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[43]
-# A144
-# /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[44]
