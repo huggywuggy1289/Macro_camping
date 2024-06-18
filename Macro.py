@@ -14,8 +14,8 @@ from captcha.image import ImageCaptcha
 # 자동방지입력문자
 pytesseract.pytesseract.tesseract_cmd = "C:\\Users\\손재윤\\OneDrive\\바탕 화면\\tesseract-5.4.1\\tesseract.exe"
 
-# A구역
-XPATH = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[3]/td[4]/ul/li[1]/button'
+# A구역(수정요망/날짜별로 tr과 td가 다름)
+XPATH = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[3]/td[3]/ul/li[1]/button'
 
 def clock(target_time):
     while True:
@@ -57,8 +57,8 @@ try:
 
     clock("10:00") #함수 적용
 
-    # 날짜 선택
-    date_xpath = "//button[@value='C:2024-07-17']"
+    # 날짜 선택(수정요망)
+    date_xpath = "//button[@value='C:2024-07-16']"
     WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH, date_xpath)))
     print("날짜 선택 완료")
 
@@ -73,8 +73,8 @@ try:
     try:
         location_button_xpath = ['/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[47]',
                                  '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[49]',
-                                 '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[43]',
-                                 '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[28]']
+                                 '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[36]',
+                                 '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[4]/div/button[31]']
         for path in location_button_xpath:
             try:
                 job = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, path)))
@@ -92,11 +92,16 @@ try:
 
     except Exception as e:
         print(f"위치 버튼 클릭 과정에서 오류 발생: {e}")
-    # 3박 4일
+    # 1박 2일 : /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[1]
+    # 2박 3일 : /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[2]
+    # 3박 4일 : /html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[3]
     try:
-        stay_xpath = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[3]'
-        browser.find_element(By.XPATH, stay_xpath).click()
-        print("숙박 기간 지정 성공")
+        stay_xpath = ['/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[3]',
+                     '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[2]',
+                     '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[1]']
+        for stay in stay_xpath:
+            browser.find_element(By.XPATH, stay_xpath).click()
+            print("숙박 기간 지정 성공")
     except Exception as e:
         print(f"숙박 기간 지정 과정에서 오류 발생: {e}")
 
