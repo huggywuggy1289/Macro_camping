@@ -11,7 +11,7 @@ from pytesseract import image_to_string
 from PIL import Image
 from captcha.image import ImageCaptcha
 
-# 자동방지입력문자
+# 자동방지입력문자(텍스트 이미지를 추출하는데 사용)
 pytesseract.pytesseract.tesseract_cmd = "C:\\Users\\손재윤\\OneDrive\\바탕 화면\\tesseract-5.4.1\\tesseract.exe"
 
 # A구역(7.30)
@@ -19,7 +19,7 @@ XPATH = '/html/body/div[4]/table/tbody/tr/td[3]/div/div/table[2]/tbody/tr[5]/td[
 
 def clock(target_time):
     while True:
-        current_time = datetime.now().strftime("%H:%M") # 시:분]
+        current_time = datetime.now().strftime("%H:%M") # 시:분
         if target_time == current_time or target_time < current_time:
             print(f"현재 시간: {current_time} - 예약을 시도합니다!")
             break
@@ -33,12 +33,15 @@ def click_button(xpath):
         button = WebDriverWait(browser, 20).until(EC.element_to_be_clickable((By.XPATH, xpath)))
         browser.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
         time.sleep(1)
+        #자바스크립트 문법을 사용(기본 셀레니움의 클릭 메소드보다 정확)
         browser.execute_script("arguments[0].click();", button)
         print(f"버튼 클릭 성공: {xpath}")
         return True
     except Exception as e:
         print(f"버튼 클릭 실패: {e}")
         return False
+    # 이 코드는 브라우저에서 지정된 XPath를 사용하여 요소를 찾고, 해당 요소가 클릭 
+    # 가능해질 때까지 최대 20초 동안 기다림. 요소가 클릭 가능해지면 button 변수에 저장
 
 try:
     browser = webdriver.Chrome()
@@ -91,7 +94,7 @@ try:
                 print("인원 지정 성공")
 
             except Exception as e:
-                print(f"위치 버튼 클릭 실패: {path} - {e}")
+                print(f"버튼 클릭 실패: {path} - {e}")
                 continue
 
     except Exception as e:
@@ -102,10 +105,12 @@ try:
         stay_xpath = ['/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[3]',
                      '/html/body/div[4]/table/tbody/tr/td[3]/div/div/div[5]/select/option[2]']
         for stay in stay_xpath:
-            browser.find_element(By.XPATH, stay_xpath).click()
-            print("숙박 기간 지정 성공")
+            stay_element = WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH, stay)))
+            stay_element.click()
+            break
     except Exception as e:
         print(f"숙박 기간 지정 과정에서 오류 발생: {e}")
+        raise Exception(f"숙박 기간 지정 과정에서 오류 발생: {e}")
 
     print("무사히 지정 완료!")
 
