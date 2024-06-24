@@ -140,4 +140,4 @@ except Exception as e:
 
 finally:
     time.sleep(5000)
-    browser.quit()  # 브라우저 종료
+    # browser.quit()  # 브라우저 종료
